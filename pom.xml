@@ -12,13 +12,14 @@
         <module>backend</module>
         <module>rest</module>
         <module>war</module>
-        <module>integration-tests</module>
+        <!--<module>integration-tests</module>-->
     </modules>
 
     <properties>
         <java.ee.version>7.0</java.ee.version>
         <jackson.version>2.9.5</jackson.version>
         <kotlin.version>1.2.41</kotlin.version>
+        <java.version>1.8</java.version>
 
         <jboss.eap.server.version>7.1.1.GA</jboss.eap.server.version>
 
@@ -26,12 +27,10 @@
         <jacoco.report.ut>${project.build.directory}/jacoco-ut.exec</jacoco.report.ut>
         <jacoco.report.it>${project.build.directory}/jacoco-it.exec</jacoco.report.it>
 
-        <sonar.language>kotlin</sonar.language>
         <sonar.sources>src/main/kotlin</sonar.sources>
         <sonar.tests>src/test/kotlin</sonar.tests>
         <sonar.junit.reportPaths>${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
-        <sonar.jacoco.reportPaths>${jacoco.report.ut},${jacoco.report.it}</sonar.jacoco.reportPaths>
-
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <!-- Test libs -->
         <junit.version>4.12</junit.version>
         <kluent.version>1.38</kluent.version>
@@ -207,6 +206,15 @@
 
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <executions>
@@ -215,8 +223,10 @@
                         <id>jacoco-agent-ut</id>
                         <goals>
                             <goal>prepare-agent</goal>
+                            <goal>report</goal> <!--*NEW*-->
                         </goals>
                         <configuration>
+                            <dataFile>${jacoco.report.ut}</dataFile> <!--*NEW*-->
                             <destFile>${jacoco.report.ut}</destFile>
                             <propertyName>surefireArgLine</propertyName>
                         </configuration>
@@ -226,8 +236,10 @@
                         <id>jacoco-agent-it</id>
                         <goals>
                             <goal>prepare-agent-integration</goal>
+                            <goal>report-integration</goal> <!--*NEW*-->
                         </goals>
                         <configuration>
+                            <dataFile>${jacoco.report.ut}</dataFile> <!--*NEW*-->
                             <destFile>${jacoco.report.it}</destFile>
                             <propertyName>failsafeArgLine</propertyName>
                         </configuration>

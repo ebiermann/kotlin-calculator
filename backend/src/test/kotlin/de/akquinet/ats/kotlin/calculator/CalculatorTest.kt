@@ -7,10 +7,16 @@ import org.junit.Test
 class CalculatorTest {
 
     val calculator = Calculator()
+    val calculatorJava = CalculatorJava()
 
     @Test
     fun canAdd() {
         calculator.add(9.0, 10.0) `should be equal to` 19.0
+    }
+
+    @Test
+    fun javaCanAddToo() {
+        calculatorJava.add(9.0, 10.0) `should be equal to` 19.0
     }
 
     @Test
